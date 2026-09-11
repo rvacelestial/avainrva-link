@@ -2,6 +2,7 @@
 
 Astro rebuild of avainrva.com, replacing the WordPress/Kadence build. Static output.
 
+<<<<<<< HEAD
 The GitHub repo (`rvacelestial` account) stays **private** — GitHub Pages only works
 from a public repo on a free account, and a public repo would mean anyone who found it
 could browse every file, including uploaded images and test/draft pages. Instead,
@@ -223,3 +224,5 @@ It needs five repo secrets set once in Settings → Secrets and variables → Ac
 `NAMECHEAP_TARGET_PATH`) — see the comments in the workflow file for exactly what each
 one is and where it comes from. Staticrypt isn't wired into this workflow yet — see the
 TODO comment in the workflow file for where it'll go once the archive section exists.
+=======
+>>>>>>> cf3e8207b2ac7a272b2f71f5c86db89c8fa6e3ae
