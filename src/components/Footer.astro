@@ -1,0 +1,303 @@
+---
+import { nav, footerExtra, social } from "../data/nav.js";
+---
+<footer class="site-footer">
+  <!-- Thin dark sliver, just the logo — echoes the header's dark gradient top.
+       Everything else below sits in its own opaque band, not on the gradient. -->
+  <div class="footer-top">
+    <img src="/images/ava-celeste-logo-on-dark.svg" alt="Ava Celeste" class="footer-brand-logo" />
+  </div>
+
+  <div class="footer-light">
+    <p class="footer-tagline">Mature Escort — Richmond, VA</p>
+
+    <div class="footer-columns">
+      <div class="footer-col">
+        <h3 class="footer-heading">Stay in the loop</h3>
+        <p class="footer-note">A short note on what a newsletter would actually offer — new posts, availability, or whatever you decide.</p>
+        <!-- Mailjet widget embed — replaces the placeholder form above while we test it.
+             This is Mailjet's own snippet, unmodified. -->
+        <iframe data-w-type="embedded" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://09qi2.mjt.lu/wgt/09qi2/kvx/form?c=31b81749" width="100%" style="height: 0;"></iframe>
+        <script is:inline type="text/javascript" src="https://app.mailjet.com/pas-nc-embedded-v1.js"></script>
+        <p class="footer-seo-placeholder">[SEO placeholder — a short paragraph on Richmond mature companionship, service area, and what makes this site worth reading, written once real copy is ready.]</p>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="footer-heading">Menu</h3>
+        <ul class="footer-list">
+          {nav.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+          {footerExtra.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="footer-heading">Elsewhere</h3>
+        <ul class="footer-social">
+          {social.map((item) => (
+            <li><a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <p class="copyright">&copy; 2021&ndash;2026 Ava Celeste. All rights reserved.</p>
+  </div>
+
+  <div class="footer-dark">
+    <div class="footer-legal">
+      <p class="anti-ai-statement">
+        No generative AI was used to create the content and imagery of this site. 100% Human-Created.
+        <br />
+        <strong>NO AI TRAINING:</strong> Any use of this website or its contents to train generative
+        artificial intelligence technologies is expressly prohibited.
+      </p>
+    </div>
+
+    <div class="footer-directories">
+      <h3 class="footer-heading">Directories / Link Trades</h3>
+      <div class="banner-grid">
+        <!-- Begin Velvet22 Banner - do not change any code in this block! -->
+        <div style="max-width: 400px; margin: 0 auto;">
+          <a target="_blank" href="https://velvet22.com/" rel="noopener noreferrer">
+            <img width="100%" height="auto" style="max-width: 100%; border: 0;" alt="Velvet - Exclusive Directory for High Class Escorts" src="https://velvet22.com/images/banners/velvet-black-bg.png" />
+          </a>
+        </div>
+        <!-- End Velvet22 Banner -->
+
+        <div style="text-align: center; min-width: 468px; min-height: 60px;">
+          <a href="https://www.slixa.com/virginia/richmond/ava-carrera" target="_top">
+            <img src="https://badge.slixa.com/ava-carrera/slixa_468x60_photo_verified.png" alt="Slixa" width="468" height="60" />
+          </a>
+        </div>
+
+        <div style="text-align: center;">
+          <a href="https://sexworkersear.ch" rel="external noopener">
+            <img src="https://sexworkersear.ch/wp-content/uploads/2023/10/Sex-Worker-Search-Banner.jpg" style="max-width: 100%;" alt="Sex Worker Search" />
+          </a>
+        </div>
+
+        <a href="http://www.lustlust.com" target="_blank" title="Independent escorts listing">
+          <img src="http://www.lustlust.com/banners/escorts_directory_lust.gif" alt="Escorts Directory" style="border: 0;" />
+        </a>
+
+        <a href="https://rs2k.ch" target="_blank">
+          <img src="https://rs2k.ch/images/RS2K-badge.gif" alt="RS2K" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+</footer>
+
+<style>
+  /* The sunrise gradient now lives only on .site-gradient (Header+main), sized to
+     that box so it completes its dark-to-gold sweep right before the footer starts
+     — see theme.css. The footer no longer shares that gradient at all: .footer-top
+     gets its own flat dark color (same value as .footer-dark's bookend, #161a1d),
+     and .footer-light/.footer-dark paint their own opaque backgrounds, so the
+     footer reads as three honest full-width bands. */
+  .site-footer {
+    padding: 0;
+  }
+  .footer-top {
+    background: #161a1d;
+    text-align: center;
+    padding: 2.5rem 1.5rem 1.75rem;
+  }
+  .footer-brand-logo {
+    height: 3rem;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* --- light band: tagline, the three columns, copyright --- */
+  .footer-light {
+    background: var(--near-white);
+    color: var(--near-black);
+    padding: 0 1.5rem 2rem;
+  }
+  .footer-tagline {
+    text-align: center;
+    font-family: var(--font-header);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--charcoal);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.75rem 0;
+    border-top: 1px solid rgba(34, 32, 30, 0.12);
+  }
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem 3.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(34, 32, 30, 0.12);
+  }
+  .footer-heading {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+    color: var(--charcoal);
+  }
+  .footer-list, .footer-social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .footer-list li, .footer-social li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-list a, .footer-social a {
+    color: var(--near-black);
+    text-decoration: none;
+  }
+  .footer-list a:hover, .footer-social a:hover {
+    color: var(--color-accent-gold);
+  }
+  .newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .newsletter-form input {
+    flex: 1;
+    padding: 0.5em 0.7em;
+    border: 1px solid var(--color-border);
+  }
+  .newsletter-form button {
+    background: var(--near-black);
+    color: var(--near-white);
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+  }
+  .footer-note, .footer-seo-placeholder {
+    font-size: 0.85rem;
+    color: var(--charcoal);
+  }
+  .footer-seo-placeholder {
+    font-style: italic;
+    opacity: 0.7;
+  }
+  .copyright {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--charcoal);
+    opacity: 0.85;
+    max-width: 1100px;
+    margin: 2rem auto 0;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(34, 32, 30, 0.12);
+  }
+
+  /* --- dark band: anti-AI statement, directories/link trades --- */
+  .footer-dark {
+    /* same dark value as the top stop of --gradient-sunrise, so this bookends
+       the header's dark band instead of introducing a new color. */
+    background: #161a1d;
+    color: var(--near-white);
+    padding: 2.5rem 1.5rem 3rem;
+  }
+  .footer-dark .footer-heading {
+    color: var(--near-white);
+    opacity: 0.85;
+  }
+  .footer-legal {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 0.78rem;
+    opacity: 0.85;
+  }
+  .footer-directories {
+    max-width: 1100px;
+    margin: 2rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+  }
+  .banner-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  /* --- back to top: fixed, appears once you've scrolled down a bit. Dark but not
+     the site's darkest (charcoal, not near-black/#161a1d), arrow in cream — the
+     2nd-lightest neutral in the palette, one step down from near-white/soft-white
+     which are used everywhere else. Square corners, matching the site's design language. */
+  .back-to-top {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--charcoal);
+    color: var(--cream);
+    border: none;
+    cursor: pointer;
+    z-index: 150;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(0.5rem);
+    transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    background: var(--near-black);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+      transition: opacity 0.01ms;
+      transform: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var btn = document.getElementById("back-to-top");
+    if (!btn) return;
+    var SHOW_AFTER = 400;
+    function onScroll() {
+      if (window.scrollY > SHOW_AFTER) {
+        btn.classList.add("visible");
+      } else {
+        btn.classList.remove("visible");
+      }
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    btn.addEventListener("click", function () {
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    });
+  })();
+</script>

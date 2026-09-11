@@ -1,0 +1,32 @@
+---
+// Blog cards — thin wrapper around the existing BlogPosts.astro component
+// (already real, already wired to the escortrichmond.com feed at build
+// time). Two variations map straight to BlogPosts' two variants, so this
+// slice is insertable on any page without duplicating that logic.
+import BlogPosts from "../BlogPosts.astro";
+import type { Slice } from "../../lib/prismicio.ts";
+
+interface BlogCardsPrimary {
+  heading?: string | null;
+  limit?: number | null;
+}
+interface Props {
+  slice: Slice<"blog_cards", "card" | "list", BlogCardsPrimary>;
+}
+const { slice } = Astro.props;
+const { heading, limit } = slice.primary;
+---
+
+<div class="blog-slice reveal">
+  {heading && <h2>{heading}</h2>}
+  <BlogPosts variant={slice.variation === "list" ? "list" : "card"} limit={limit ?? 3} />
+</div>
+
+<style>
+  .blog-slice {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    background: var(--color-surface-alt);
+  }
+</style>

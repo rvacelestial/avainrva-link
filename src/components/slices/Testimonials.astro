@@ -1,0 +1,70 @@
+---
+// Testimonials — checkerboard grid, no card boxes. Ported from
+// component-style-sheet #testimonials. `items` (Repeatable Zone): one photo
+// + quote pair per row — add as many as you like.
+import { isFilled, asImageSrc, type Slice } from "../../lib/prismicio.ts";
+
+interface TestimonialItem {
+  photo?: any;
+  name?: string | null;
+  quote?: string | null;
+}
+interface Props {
+  slice: Slice<"testimonials", "default", Record<string, never>, TestimonialItem>;
+}
+const { slice } = Astro.props;
+---
+
+<div class="testimonial-grid reveal">
+  {slice.items.map((item) => {
+    const imgUrl = isFilled.image(item.photo) ? asImageSrc(item.photo, { width: 600 }) : null;
+    return (
+      <>
+        <div class="testimonial-photo" style={imgUrl ? `background-image:url(${imgUrl})` : ""}></div>
+        <div class="testimonial-quote">
+          <span class="quote-mark">&ldquo;</span>
+          {item.name && <p class="name">{item.name}</p>}
+          {item.quote && <p>{item.quote}</p>}
+        </div>
+      </>
+    );
+  })}
+</div>
+
+<style>
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    background: var(--color-surface);
+  }
+  .testimonial-photo {
+    aspect-ratio: 3 / 4;
+    background-color: var(--warm-off-white);
+    background-size: cover;
+    background-position: center;
+  }
+  .testimonial-quote { text-align: center; padding: 1rem; display: flex; flex-direction: column; justify-content: center; }
+  .testimonial-quote .quote-mark {
+    font-family: var(--font-header);
+    font-size: 2.75rem;
+    color: var(--color-accent-gold);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .testimonial-quote .name {
+    font-family: var(--font-menu);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.6rem;
+  }
+  .testimonial-quote p { font-size: 0.85rem; font-style: italic; color: var(--color-text-muted); margin: 0; }
+  .testimonial-quote .name { font-style: normal; }
+  @media (max-width: 760px) {
+    .testimonial-grid { grid-template-columns: 1fr; }
+  }
+</style>

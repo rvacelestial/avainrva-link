@@ -1,0 +1,212 @@
+/* ==========================================================================
+   Ava Celeste — design tokens
+   Source palette (Kadence global palette 1–9, confirmed intentional):
+     palette1 #e4c9be  blush
+     palette2 #eae2db  cream
+     palette3 #222222  near-black (headings/text)
+     palette4 #3a3a3e  charcoal (body text)
+     palette5 #cccccc  mid gray
+     palette6 #e6dfd4  warm off-white
+     palette7 #eae2db  (duplicate of palette2)
+     palette8 #f9f4f1  near-white
+     palette9 #f5f5f5  soft white
+   palette10–15 dropped (confirmed Kadence stock info/warning defaults, unused).
+   Gold accent: placeholder until final value is chosen — see --color-accent-gold.
+   ========================================================================== */
+
+:root {
+  /* --- brand palette (fixed, same in both themes) --- */
+  --blush: #e4c9be;
+  --cream: #eae2db;
+  --warm-off-white: #e6dfd4;
+  --near-white: #f9f4f1;
+  --soft-white: #f5f5f5;
+  --mid-gray: #cccccc;
+  --near-black: #222222;
+  --charcoal: #3a3a3e;
+
+  /* Gold accent — finalized as a muted antique gold (was a brighter placeholder).
+     Every gold-colored thing on the site reads from this one variable,
+     so swapping the value here updates the whole site at once if it needs to change. */
+  --color-accent-gold: #c9a24b;
+
+  /* --- light theme (default) --- */
+  --color-bg: var(--near-white);
+  --color-surface: #ffffff;
+  --color-surface-alt: var(--warm-off-white);
+  --color-text: var(--near-black);
+  --color-text-muted: var(--charcoal);
+  --color-border: var(--mid-gray);
+  --color-accent: var(--blush);
+  --color-accent-soft: var(--cream);
+
+  /* sunrise gradient, light mode: dark-to-gold, as supplied */
+  --gradient-sunrise: linear-gradient(180deg, #161a1d 0%, #596873 50%, var(--color-accent-gold) 100%);
+
+  --font-header: "Bodoni Moda Variable", Georgia, serif;
+  --font-body: "Peridot PE Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-menu: var(--font-body);
+  --font-accent: "Lindsey Signature", "Summer Pisces", cursive;
+
+  color-scheme: light;
+}
+
+/* --- dark theme --- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #1c1a17;
+    --color-surface: #262320;
+    --color-surface-alt: #2f2b27;
+    --color-text: var(--soft-white);
+    --color-text-muted: var(--mid-gray);
+    --color-border: var(--charcoal);
+    --color-accent: var(--blush);
+    --color-accent-soft: #3a332d;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #1c1a17;
+  --color-surface: #262320;
+  --color-surface-alt: #2f2b27;
+  --color-text: var(--soft-white);
+  --color-text-muted: var(--mid-gray);
+  --color-border: var(--charcoal);
+  --color-accent: var(--blush);
+  --color-accent-soft: #3a332d;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --color-bg: var(--near-white);
+  --color-surface: #ffffff;
+  --color-surface-alt: var(--warm-off-white);
+  --color-text: var(--near-black);
+  --color-text-muted: var(--charcoal);
+  --color-border: var(--mid-gray);
+  --color-accent: var(--blush);
+  --color-accent-soft: var(--cream);
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  /* The off-canvas menu panel sits at 80vw, fixed, translated fully off-screen to
+     the right when closed — its un-transformed layout box still extends past the
+     viewport edge, which was adding horizontal overflow (and a faint rubber-band
+     scroll on some mobile browsers) on every page, not just this one. */
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sunrise gradient wrapper — applied to the page shell, not <body> directly,
+   so it can be toggled off / adjusted independently of the base background.
+   No `background-attachment: fixed` here (on purpose) — that pins the gradient to
+   the browser window instead of this element's own box, so the gold end only ever
+   shows in whatever slice of the viewport happens to be at the bottom when you're
+   scrolled all the way down. Left at the default (scroll), the gradient sizes
+   itself to .site-gradient's own height — which is exactly the Header+main content,
+   ending right where the Footer begins — so the dark-to-gold sweep always completes
+   right before the footer starts, on any page length, without a fixed pixel value. */
+.site-gradient {
+  background: var(--gradient-sunrise);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-header);
+  color: var(--color-text);
+  line-height: 1.15;
+}
+
+nav, .menu-font {
+  font-family: var(--font-menu);
+}
+
+.accent-text {
+  font-family: var(--font-accent);
+  color: var(--color-accent);
+}
+
+/* Drop caps — opt-in via class, not global, so it's used deliberately */
+.drop-cap::first-letter {
+  font-family: var(--font-header);
+  float: left;
+  font-size: 3.4em;
+  line-height: 0.85;
+  padding-right: 0.08em;
+  color: var(--color-accent-gold);
+}
+
+/* ==========================================================================
+   Photo treatment — grayscale-to-color hover with inset gold outline.
+   Used on public-facing photos site-wide. NOT used in the client archive,
+   which gets a watermark overlay instead (see archive.css).
+   ========================================================================== */
+
+img.kb-img {
+  filter: grayscale(100%);
+  outline: 2px solid var(--color-accent-gold);
+  outline-offset: -1rem;
+  transition: filter 0.3s ease;
+}
+img.kb-img:hover,
+img.kb-img:focus-visible {
+  filter: grayscale(0%);
+}
+
+/* ==========================================================================
+   Theme toggle (light / dark / system)
+   ========================================================================== */
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text);
+  cursor: pointer;
+  font-family: var(--font-menu);
+  font-size: 0.85rem;
+  padding: 0.4em 0.9em;
+}
+.theme-toggle:hover {
+  border-color: var(--color-accent-gold);
+}
+
+/* ==========================================================================
+   Scroll reveal — fade + slight rise. Opt-in via class="reveal", used by the
+   Prismic slice library (src/components/slices/) so each section settles in
+   gently rather than popping in with the rest of the page. The observer that
+   adds .in-view lives in ScrollReveal.astro (included once, in BaseLayout).
+   ========================================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

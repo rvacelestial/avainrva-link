@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ObfuscatedEmail from "../../components/ObfuscatedEmail.astro";
+// screening@avainrva.com confirmed live (Protonmail via Cloudflare) — see ObfuscatedEmail.astro
+// for the click-to-reveal technique that replaces the old WP anti-spam plugin.
+---
+<BaseLayout title="Contact / Screening" description="How to reach Ava Celeste, and what screening requires.">
+  <section>
+    <h1>RSVP!</h1>
+    <p class="drop-cap">
+      Have you read the <a href="/you/client-guide/">client guide</a> yet? If you have, then this step
+      should be a breeze for you. Even if you haven't, just follow my lead. It's really not hard to do,
+      and you impress me by doing so.
+    </p>
+    <p>
+      Contacting me within the same 24hrs you want to meet isn't going to work out. I check email once
+      per day, and Sundays I try to be 100% offline.
+    </p>
+    <p>RS2K members are welcome.</p>
+  </section>
+
+  <section>
+    <h2>1. Screen first, deposit second</h2>
+    <p>
+      If you pass screening and we mutually agree on a date/time, I'll send you a few simple options,
+      including crypto, for paying the deposit.
+    </p>
+    <p class="callout">
+      Please be aware: if you have a Hotmail/Outlook or Comcast account, Microsoft and Comcast have
+      blacklisted my email address. You'll need a different email address if you'd like to get a reply.
+    </p>
+  </section>
+
+  <section>
+    <h2>2. Double confirmation</h2>
+    <p>
+      After confirming receipt of your deposit, I'll contact you to confirm the booking the morning of
+      or night before. After receiving your confirmation, I'll send the necessary final details (i.e. my
+      phone number, clothing description, etc.).
+    </p>
+  </section>
+
+  <section>
+    <h2>3. Any questions?</h2>
+    <p>If you still have questions, they're likely answered in the <a href="/you/client-guide/">Client Guide</a>. I'm thorough, but as concise as possible.</p>
+  </section>
+
+  <section>
+    <h2>What I need to verify your employment</h2>
+    <p>One of the following:</p>
+    <ul>
+      <li>A publicly-accessible link to a company website with a page about you</li>
+      <li>Articles or interviews featuring you</li>
+      <li>LinkedIn profile with 500+ connections and headshot</li>
+      <li>Any other online, publicly-accessible source featuring your full name and current employment, with or without a photo</li>
+    </ul>
+    <p>If you can't find yourself easily via Googling the information you've given me, I won't be able to either.</p>
+    <p class="note">
+      You can always send me a simple greeting as a way of letting me see your LinkedIn profile. I will
+      not follow or interact with your profile.
+    </p>
+  </section>
+
+  <section>
+    <h2>If you're not on LinkedIn</h2>
+    <p>The frustration-reducing alternative screening option:</p>
+    <ul>
+      <li>$50</li>
+      <li>An unobstructed photo of the front of your state ID</li>
+      <li>A professional screener will screen you</li>
+    </ul>
+    <p>
+      They have access to databases I do not, and can screen you with less reliance on the lazy DIY
+      methods I use. I still need your employment information, though — that's still required, for
+      reasons I cover in the Client Guide.
+    </p>
+  </section>
+
+  <section>
+    <h2>Screening via email</h2>
+    <p>
+      For several reasons, I'm going form-free. The screening information I request is the same, with or
+      without a form. Email is not a way to avoid screening.
+    </p>
+    <p class="callout">
+      Please be aware: if you have a Hotmail/Outlook or Comcast account, Microsoft and Comcast have
+      blacklisted my email address. You'll need a different email address if you'd like to get a reply.
+    </p>
+    <p><strong>Your screening information:</strong></p>
+    <ul>
+      <li>Your full name, and city/state of residence [+ RS2K phone number, if you're a member]</li>
+      <li>The full name of your company (if self-employed, the full name of your company/DBA)</li>
+      <li>A direct link to online proof of employment (as detailed above)</li>
+      <li>Preferred day and time to meet, and for how long</li>
+      <li>Please introduce yourself. What would you like me to know about you, as a person?</li>
+    </ul>
+    <ObfuscatedEmail user="screening" domain="avainrva.com" />
+  </section>
+
+  <section class="cta">
+    <h2>Thank you!</h2>
+    <p>I look forward to hearing from you, and meeting you, soon.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .callout {
+    background: var(--color-surface-alt);
+    border-left: 3px solid var(--color-accent-gold);
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+  }
+  .note { font-size: 0.9rem; color: var(--color-text-muted); }
+  .cta { text-align: center; margin-top: 2rem; }
+</style>

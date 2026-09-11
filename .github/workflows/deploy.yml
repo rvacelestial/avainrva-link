@@ -1,0 +1,67 @@
+name: Build and deploy to Namecheap
+
+# NOTE (Toni): this replaces the old GitHub Pages workflow. GitHub Pages on a
+# free account only works from a PUBLIC repo — anyone who found the repo could
+# browse every file in it, including uploaded images and test pages. Since the
+# repo is now (or will be) private, Pages is no longer an option, and it's not
+# needed anyway: this workflow builds the site exactly as before, then uploads
+# the finished static files straight to your Namecheap hosting over SSH/rsync.
+# Your domain keeps serving the site exactly as it does today — only the
+# delivery mechanism changes, and the source/images stay out of public view.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly rebuild so the blog-card grid on /me/ (fetched from
+    # escortrichmond.com/feed.json at build time) picks up new posts even when
+    # nothing else on the site changes — posting there is sporadic, so weekly
+    # is enough. Monday 06:00 UTC.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "deploy"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install and build
+        uses: withastro/action@v3
+        # Runs `npm install` + `astro build`, producing dist/. Does NOT upload
+        # anywhere — that's the next step, since we're no longer using
+        # GitHub Pages as the host.
+        # TODO: once Staticrypt is wired in, add a step here that encrypts
+        # dist/deposit/index.html (and later, the archive section) before deploy.
+
+      - name: Deploy dist/ to Namecheap over SSH
+        uses: easingthemes/ssh-deploy@v5
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.NAMECHEAP_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.NAMECHEAP_HOST }}
+          REMOTE_USER: ${{ secrets.NAMECHEAP_USER }}
+          REMOTE_PORT: ${{ secrets.NAMECHEAP_SSH_PORT }}
+          SOURCE: "dist/"
+          # TODO(Toni): confirm the exact folder Namecheap serves your domain
+          # from — usually public_html/ for the primary domain, or
+          # public_html/subdomain/ for an addon domain. Update TARGET below
+          # to match once confirmed.
+          TARGET: ${{ secrets.NAMECHEAP_TARGET_PATH }}
+          ARGS: "-rltgoDzvO --delete"
+        # All five secrets referenced above (NAMECHEAP_SSH_KEY, NAMECHEAP_HOST,
+        # NAMECHEAP_USER, NAMECHEAP_SSH_PORT, NAMECHEAP_TARGET_PATH) get added
+        # in this repo's Settings → Secrets and variables → Actions — never
+        # pasted into chat. NAMECHEAP_SSH_KEY is a dedicated SSH key pair
+        # generated just for this (private half goes in GitHub as a secret,
+        # public half goes in Namecheap's cPanel under SSH Access → Manage SSH
+        # Keys → Import Key). Happy to walk through generating and placing
+        # that key step by step whenever you're ready to wire this up for
+        # real — none of it involves sharing your actual account password.

@@ -1,0 +1,110 @@
+---
+// Photo gallery strip with a real click-to-enlarge lightbox. Ported from
+// component-style-sheet #gallery. `items` (Repeatable Zone): one photo per
+// row, add as many as you like. Each instance on a page gets its own
+// lightbox (scoped by a per-instance id), so more than one gallery on the
+// same page won't collide.
+import { isFilled, asImageSrc, type Slice } from "../../lib/prismicio.ts";
+
+interface PhotoItem {
+  photo?: any;
+}
+interface Props {
+  slice: Slice<"photo_gallery", "default", Record<string, never>, PhotoItem>;
+}
+const { slice } = Astro.props;
+const instanceId = `gallery-${Math.random().toString(36).slice(2, 9)}`;
+const photos = slice.items
+  .map((item) => (isFilled.image(item.photo) ? asImageSrc(item.photo, { width: 1200 }) : null))
+  .filter((url): url is string => Boolean(url));
+---
+
+<div class="photo-gallery" data-gallery={instanceId}>
+  <div class="photo-strip">
+    {photos.map((url, i) => (
+      <button
+        class="strip-photo"
+        style={`background-image:url(${url})`}
+        data-full={url}
+        aria-label={`Enlarge photo ${i + 1}`}
+      ></button>
+    ))}
+  </div>
+  <div class="lightbox" data-lightbox>
+    <span class="lightbox-hint">click anywhere to close</span>
+    <div class="lightbox-inner"></div>
+  </div>
+</div>
+
+<style>
+  .photo-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    background: var(--color-surface);
+  }
+  .strip-photo {
+    aspect-ratio: 3 / 4;
+    cursor: zoom-in;
+    background-color: var(--warm-off-white);
+    background-size: cover;
+    background-position: center;
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: -0.6rem;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+    border: 0;
+    padding: 0;
+  }
+  .strip-photo:hover,
+  .strip-photo:focus-visible { filter: grayscale(0%); }
+  @media (max-width: 700px) {
+    .photo-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 9, 8, 0.9);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-inner {
+    width: min(70vw, 32rem);
+    aspect-ratio: 3 / 4;
+    background-size: cover;
+    background-position: center;
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: -1rem;
+  }
+  .lightbox-hint {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: var(--near-white);
+    font-family: var(--font-menu);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".photo-gallery:not([data-wired])").forEach((gallery) => {
+    gallery.dataset.wired = "true";
+    const lightbox = gallery.querySelector<HTMLElement>("[data-lightbox]");
+    const inner = lightbox?.querySelector<HTMLElement>(".lightbox-inner");
+    gallery.querySelectorAll<HTMLButtonElement>(".strip-photo").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (inner) inner.style.backgroundImage = `url(${btn.dataset.full})`;
+        lightbox?.classList.add("open");
+      });
+    });
+    lightbox?.addEventListener("click", () => lightbox.classList.remove("open"));
+  });
+</script>

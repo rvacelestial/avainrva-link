@@ -1,0 +1,50 @@
+---
+// Bot-resistant email display — replaces WordPress's [hide_email] shortcode.
+// The address is never present as plain text in the page source; it's assembled
+// client-side on click, which stops simple scrapers without needing a plugin.
+interface Props {
+  user: string;    // part before the @
+  domain: string;  // part after the @
+  label?: string;  // optional display text; defaults to the assembled address
+}
+const { user, domain, label } = Astro.props;
+---
+<button
+  class="obfuscated-email"
+  type="button"
+  data-user={user}
+  data-domain={domain}
+  data-label={label ?? ""}
+>
+  Click to reveal email address
+</button>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".obfuscated-email").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const { user, domain, label } = btn.dataset;
+      const address = `${user}@${domain}`;
+      const link = document.createElement("a");
+      link.href = `mailto:${address}`;
+      link.textContent = label && label.length > 0 ? label : address;
+      link.className = "obfuscated-email-revealed";
+      btn.replaceWith(link);
+    });
+  });
+</script>
+
+<style>
+  .obfuscated-email {
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    padding: 0.4em 0.8em;
+  }
+  .obfuscated-email:hover {
+    border-color: var(--color-accent-gold);
+  }
+</style>

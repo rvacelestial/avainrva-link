@@ -1,0 +1,35 @@
+---
+// Registers the IntersectionObserver that makes class="reveal" (see
+// theme.css) actually fade/rise into view, instead of staying invisible.
+// Include this ONCE, sitewide — it's already added in BaseLayout.astro.
+// If IntersectionObserver isn't supported, or the visitor has
+// prefers-reduced-motion on, everything just shows immediately — nothing
+// ever gets stuck invisible.
+---
+<script>
+  function initReveal() {
+    const els = document.querySelectorAll(".reveal:not(.in-view)");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!("IntersectionObserver" in window) || reduceMotion) {
+      els.forEach((el) => el.classList.add("in-view"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initReveal);
+  } else {
+    initReveal();
+  }
+</script>

@@ -1,0 +1,85 @@
+---
+// Bio + quote split — one slice_type, one variation. Ported from
+// component-style-sheet #bio-quote ("Meet Your Photographer"-style layout):
+// eyebrow + name on the left with a gold-bordered pull-quote box and a
+// signature line, photo on the right. Reuses the same .split grid as
+// TextPhotoSplit but with its own boxed-quote treatment, so it stays its
+// own slice_type rather than a third TextPhotoSplit variation.
+import { isFilled, asImageSrc, type Slice } from "../../lib/prismicio.ts";
+
+interface BioQuotePrimary {
+  eyebrow?: string | null;
+  name?: string | null;
+  quote?: string | null;
+  signature?: string | null;
+  image?: any;
+}
+interface Props {
+  slice: Slice<"bio_quote", "default", BioQuotePrimary>;
+}
+const { slice } = Astro.props;
+const { eyebrow, name, quote, signature, image } = slice.primary;
+const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1200 }) : null;
+---
+
+<div class="split reveal">
+  <div>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    {name && <h2>{name}</h2>}
+    {quote && (
+      <div class="bio-quote-box">
+        {quote}
+        {signature && <span class="sig">— {signature}</span>}
+      </div>
+    )}
+  </div>
+  <div class="split-photo" style={imgUrl ? `background-image:url(${imgUrl})` : ""}></div>
+</div>
+
+<style>
+  .split {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2.5rem;
+    align-items: center;
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    background: var(--color-surface-alt);
+  }
+  .split-photo {
+    aspect-ratio: 4 / 5;
+    background-color: var(--warm-off-white);
+    background-size: cover;
+    background-position: center;
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: -0.75rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.75rem;
+    font-family: var(--font-menu);
+    color: var(--color-accent-gold);
+    margin: 0 0 0.75rem;
+  }
+  .bio-quote-box {
+    background: var(--color-surface);
+    border-left: 3px solid var(--color-accent-gold);
+    padding: 1.5rem 1.75rem;
+    font-style: italic;
+    font-size: 0.98rem;
+    margin-top: 1.25rem;
+  }
+  .bio-quote-box .sig {
+    display: block;
+    margin-top: 0.75rem;
+    font-style: normal;
+    font-family: var(--font-menu);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+  @media (max-width: 700px) {
+    .split { grid-template-columns: 1fr; }
+  }
+</style>

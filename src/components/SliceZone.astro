@@ -1,0 +1,50 @@
+---
+// Drop this on any page that has a Prismic "Slices" field:
+//   <SliceZone slices={page.data.slices} />
+// It reads each slice's slice_type and renders the matching component —
+// this one file is the entire "wiring" between Prismic's page builder and
+// the real Astro components. Adding a new slice type later means: build the
+// component in src/components/slices/, add one line to sliceComponents
+// below, and model the fields in Prismic (see PRISMIC-SLICES.md) — nothing
+// else in the site needs to change.
+import Hero from "./slices/Hero.astro";
+import PullQuote from "./slices/PullQuote.astro";
+import TextPhotoSplit from "./slices/TextPhotoSplit.astro";
+import BioQuote from "./slices/BioQuote.astro";
+import StatsBar from "./slices/StatsBar.astro";
+import Testimonials from "./slices/Testimonials.astro";
+import PhotoGallery from "./slices/PhotoGallery.astro";
+import BlogCards from "./slices/BlogCards.astro";
+import Accordion from "./slices/Accordion.astro";
+import Tabs from "./slices/Tabs.astro";
+import CallToAction from "./slices/CallToAction.astro";
+import type { Slice } from "../lib/prismicio.ts";
+
+const sliceComponents: Record<string, any> = {
+  hero: Hero,
+  pull_quote: PullQuote,
+  text_photo_split: TextPhotoSplit,
+  bio_quote: BioQuote,
+  stats_bar: StatsBar,
+  testimonials: Testimonials,
+  photo_gallery: PhotoGallery,
+  blog_cards: BlogCards,
+  accordion: Accordion,
+  tabs: Tabs,
+  call_to_action: CallToAction,
+};
+
+interface Props {
+  slices: Slice[] | null | undefined;
+}
+const { slices } = Astro.props;
+---
+
+{(slices ?? []).map((slice) => {
+  const Component = sliceComponents[slice.slice_type];
+  if (!Component) {
+    console.warn(`[SliceZone] No component mapped for slice_type "${slice.slice_type}" — skipping. Add it to src/components/SliceZone.astro.`);
+    return null;
+  }
+  return <Component slice={slice} />;
+})}

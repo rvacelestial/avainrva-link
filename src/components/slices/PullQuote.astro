@@ -1,0 +1,42 @@
+---
+// Pull quote — one slice_type, one variation. Ported from
+// component-style-sheet #quote. `quote` is Rich Text so Toni can italicize
+// a word (e.g. "A love affair, *sans* messy entanglements.") from Prismic's
+// own toolbar, same as any word processor.
+import { asHTML, isFilled, type Slice } from "../../lib/prismicio.ts";
+
+interface PullQuotePrimary {
+  quote?: any;
+}
+interface Props {
+  slice: Slice<"pull_quote", "default", PullQuotePrimary>;
+}
+const { slice } = Astro.props;
+const html = isFilled.richText(slice.primary.quote) ? asHTML(slice.primary.quote) : null;
+---
+
+<div class="block-quote reveal">
+  {html && <blockquote class="pull-quote" set:html={html} />}
+</div>
+
+<style>
+  .block-quote { text-align: center; padding: 3.5rem 1.5rem; background: var(--color-surface); }
+  .pull-quote {
+    font-family: var(--font-header);
+    font-style: italic;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    max-width: 34rem;
+    margin: 0 auto;
+    line-height: 1.4;
+  }
+  .pull-quote::before,
+  .pull-quote::after {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--color-accent-gold);
+    margin: 1.15rem auto;
+  }
+  .pull-quote :global(p) { margin: 0; }
+</style>

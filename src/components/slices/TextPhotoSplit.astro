@@ -1,0 +1,66 @@
+---
+// Text + photo split — one slice_type, two variations. Ported from
+// component-style-sheet #split-block and #split-reversed: same layout,
+// `reversed` just flips which side the photo sits on (CSS `order`, so it's
+// the exact same markup either way).
+import { asHTML, asImageSrc, isFilled, type Slice } from "../../lib/prismicio.ts";
+
+interface TextPhotoSplitPrimary {
+  heading?: string | null;
+  body?: any;
+  drop_cap?: boolean;
+  image?: any;
+}
+interface Props {
+  slice: Slice<"text_photo_split", "default" | "reversed", TextPhotoSplitPrimary>;
+}
+const { slice } = Astro.props;
+const { heading, body, drop_cap, image } = slice.primary;
+const bodyHtml = isFilled.richText(body) ? asHTML(body) : null;
+const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1200 }) : null;
+const reversed = slice.variation === "reversed";
+---
+
+<div class:list={["split", "reveal", { reversed }]}>
+  <div>
+    {heading && <h2>{heading}</h2>}
+    {bodyHtml && <div class:list={{ "drop-cap": drop_cap }} set:html={bodyHtml} />}
+  </div>
+  <div class="split-photo" style={imgUrl ? `background-image:url(${imgUrl})` : ""}></div>
+</div>
+
+<style>
+  .split {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2.5rem;
+    align-items: center;
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    background: var(--color-surface-alt);
+  }
+  .split.reversed > *:first-child { order: 2; }
+  .split.reversed > *:last-child { order: 1; }
+  .split-photo {
+    aspect-ratio: 4 / 5;
+    background-color: var(--warm-off-white);
+    background-size: cover;
+    background-position: center;
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: -0.75rem;
+  }
+  .drop-cap :global(p:first-of-type::first-letter) {
+    font-family: var(--font-header);
+    float: left;
+    font-size: 3.2em;
+    line-height: 0.82;
+    padding-right: 0.09em;
+    color: var(--color-accent-gold);
+  }
+  @media (max-width: 700px) {
+    .split { grid-template-columns: 1fr; }
+    .split.reversed > *:first-child,
+    .split.reversed > *:last-child { order: initial; }
+  }
+</style>

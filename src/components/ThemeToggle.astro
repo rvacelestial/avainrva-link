@@ -1,0 +1,48 @@
+---
+// Light/dark/system toggle. Defaults to following the visitor's OS setting;
+// an explicit choice is remembered in localStorage (per-browser, never sent anywhere).
+---
+<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle light/dark theme">
+  <span id="theme-toggle-label">Theme</span>
+</button>
+
+<script is:inline>
+  (function () {
+    const root = document.documentElement;
+    const stored = localStorage.getItem("ava-theme"); // "light" | "dark" | null (= system)
+
+    function apply(mode) {
+      if (mode === "light" || mode === "dark") {
+        root.setAttribute("data-theme", mode);
+      } else {
+        root.removeAttribute("data-theme");
+      }
+    }
+    apply(stored);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("theme-toggle");
+      const label = document.getElementById("theme-toggle-label");
+      function currentMode() {
+        return localStorage.getItem("ava-theme"); // null = system
+      }
+      function render() {
+        const mode = currentMode();
+        label.textContent = mode === "dark" ? "Dark" : mode === "light" ? "Light" : "Auto";
+      }
+      render();
+      btn.addEventListener("click", () => {
+        // cycle: system -> light -> dark -> system
+        const mode = currentMode();
+        const next = mode === null ? "light" : mode === "light" ? "dark" : null;
+        if (next === null) {
+          localStorage.removeItem("ava-theme");
+        } else {
+          localStorage.setItem("ava-theme", next);
+        }
+        apply(next);
+        render();
+      });
+    });
+  })();
+</script>

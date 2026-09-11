@@ -1,0 +1,152 @@
+---
+// Call to action — one slice_type, three variations:
+//   band            — the original CTA band (component-style-sheet #cta):
+//                      solid sunrise-gradient band, centered text + button.
+//   split           — Toni's "50/50 split CTA" idea: text/button on one
+//                      side, a photo filling the other.
+//   image_background — Toni's "CTA in a colored box over a background
+//                      image/video" idea: full-bleed photo (or looping,
+//                      muted, autoplaying video) behind a solid gold-accent
+//                      box holding the text + button.
+import { isFilled, asImageSrc, asLink, type Slice } from "../../lib/prismicio.ts";
+
+interface CallToActionPrimary {
+  heading?: string | null;
+  body?: string | null;
+  button_label?: string | null;
+  button_link?: any;
+  image?: any;
+  // Optional — a direct link to a video file (e.g. uploaded to Prismic's
+  // media library, or any hosted .mp4/.webm URL) for image_background only.
+  // Leave empty to just use a still photo instead.
+  background_video?: any;
+}
+interface Props {
+  slice: Slice<"call_to_action", "band" | "split" | "image_background", CallToActionPrimary>;
+}
+const { slice } = Astro.props;
+const { heading, body, button_label, button_link, image, background_video } = slice.primary;
+const href = isFilled.link(button_link) ? asLink(button_link) : null;
+const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1600 }) : null;
+const videoUrl = isFilled.link(background_video) ? asLink(background_video) : null;
+---
+
+{slice.variation === "band" && (
+  <div class="cta-band reveal">
+    {heading && <h2>{heading}</h2>}
+    {body && <p>{body}</p>}
+    {href && button_label && <a class="button" href={href}>{button_label}</a>}
+  </div>
+)}
+
+{slice.variation === "split" && (
+  <div class="cta-split reveal">
+    <div class="cta-split-text">
+      {heading && <h2>{heading}</h2>}
+      {body && <p>{body}</p>}
+      {href && button_label && <a class="button button--dark" href={href}>{button_label}</a>}
+    </div>
+    <div class="cta-split-photo" style={imgUrl ? `background-image:url(${imgUrl})` : ""}></div>
+  </div>
+)}
+
+{slice.variation === "image_background" && (
+  <div class="cta-image-bg reveal">
+    {videoUrl ? (
+      <video class="cta-bg-media" src={videoUrl} autoplay muted loop playsinline></video>
+    ) : imgUrl ? (
+      <div class="cta-bg-media cta-bg-media--image" style={`background-image:url(${imgUrl})`}></div>
+    ) : null}
+    <div class="cta-box">
+      {heading && <h2>{heading}</h2>}
+      {body && <p>{body}</p>}
+      {href && button_label && <a class="button" href={href}>{button_label}</a>}
+    </div>
+  </div>
+)}
+
+<style>
+  /* --- band: original CTA (component-style-sheet #cta) --- */
+  .cta-band {
+    background: var(--gradient-sunrise);
+    color: var(--near-white);
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+  }
+  .cta-band h2 { color: var(--near-white); }
+  .cta-band p { color: rgba(249, 244, 241, 0.85); max-width: 36ch; margin: 0.6rem auto 0; }
+  .button {
+    display: inline-block;
+    background: var(--near-white);
+    color: var(--near-black);
+    font-family: var(--font-menu);
+    font-size: 0.88rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 0.85em 2em;
+    text-decoration: none;
+    margin-top: 1.4rem;
+  }
+
+  /* --- split: 50/50, text one side, photo the other --- */
+  .cta-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 24rem;
+    background: var(--near-black);
+  }
+  .cta-split-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--near-white);
+  }
+  .cta-split-text h2 { color: var(--near-white); }
+  .cta-split-text p { color: rgba(249, 244, 241, 0.85); max-width: 32ch; }
+  .cta-split-photo {
+    background-color: var(--warm-off-white);
+    background-size: cover;
+    background-position: center;
+  }
+  .button--dark { background: var(--color-accent-gold); color: var(--near-black); }
+  @media (max-width: 700px) {
+    .cta-split { grid-template-columns: 1fr; }
+  }
+
+  /* --- image_background: colored (gold-accent) box over a photo or video --- */
+  .cta-image-bg {
+    position: relative;
+    min-height: 34rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--near-black);
+  }
+  .cta-bg-media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cta-bg-media--image { background-size: cover; background-position: center; }
+  .cta-image-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 18, 16, 0.35);
+  }
+  .cta-box {
+    position: relative;
+    background: var(--color-accent-gold);
+    color: var(--near-black);
+    text-align: center;
+    max-width: 32rem;
+    margin: 0 1.5rem;
+    padding: 3rem 2.5rem;
+  }
+  .cta-box h2 { color: var(--near-black); }
+  .cta-box .button { background: var(--near-black); color: var(--near-white); }
+</style>

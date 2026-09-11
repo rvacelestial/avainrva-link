@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Page Not Found" description="This page doesn't exist." noindex={true}>
+  <section class="not-found">
+    <div class="not-found-card">
+      <p class="not-found-eyebrow">404</p>
+      <!-- Toni: pick whichever lands, or send me something else entirely —
+           this is the one line that's genuinely yours to nail.
+           Option A (live below): "And now for something completely different."
+           Option B: "This page wandered off. Unlike me, it's not coming back with a blog post about it."
+           Option C: "Well, this is awkward. The page you wanted doesn't exist — I do, though." -->
+      <h1>And now for something completely different.</h1>
+      <p>This page doesn't exist. Unlike me, it never got the memo.</p>
+      <a href="/" class="not-found-home">Back to the homepage &rarr;</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Full-bleed, breaking out of <main>'s 900px column — a 404 gets to feel like a
+     moment, not another paragraph in the content column. Background is layered:
+     drop a file at /public/images/404-background.jpg and it takes over automatically;
+     until then (or if it 404s itself — fitting), the sunrise gradient shows through
+     underneath with no broken-image glitch, since a failed CSS background-image
+     layer just doesn't paint, it doesn't show a broken-icon like an <img> would. */
+  .not-found {
+    /* Full-bleed breakout without the classic 100vw overflow bug (100vw includes
+       the scrollbar's width on desktop, which causes a thin horizontal-scroll
+       sliver) — this version measures from the element's own 100% instead. */
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    background-image: url("/images/404-background.jpg"), var(--gradient-sunrise);
+    background-size: cover, auto;
+    background-position: center, top;
+    background-repeat: no-repeat, no-repeat;
+  }
+  .not-found-card {
+    background: rgba(249, 244, 241, 0.94);
+    color: var(--near-black);
+    max-width: 30rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border: 1px solid rgba(34, 32, 30, 0.12);
+  }
+  .not-found-eyebrow {
+    font-family: var(--font-menu);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.8rem;
+    color: var(--color-accent-gold);
+    margin: 0 0 0.5rem;
+  }
+  .not-found-card h1 {
+    margin: 0 0 0.75rem;
+    font-size: 1.7rem;
+    color: var(--near-black);
+  }
+  .not-found-card p {
+    margin: 0 0 1.5rem;
+    color: var(--charcoal);
+  }
+  .not-found-home {
+    display: inline-block;
+    font-family: var(--font-menu);
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--near-black);
+    border-bottom: 1px solid var(--color-accent-gold);
+  }
+  .not-found-home:hover {
+    color: var(--color-accent-gold);
+  }
+</style>

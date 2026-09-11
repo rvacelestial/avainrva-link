@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Client Guide" description="Truncated client guide, with a link to the full guide on the blog.">
+  <section>
+    <h1>Client Guide</h1>
+    <p class="placeholder-note">
+      Placeholder page — this is meant to be a truncated version of the full guide, with a link
+      out to the complete post on the blog. Sub-page routing under /you/ is already wired up;
+      drop the real copy in whenever it's ready.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .placeholder-note {
+    border: 1px dashed var(--color-border);
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import OffCanvasMenu from "./OffCanvasMenu.astro";
+---
+<header class="site-header">
+  <div class="site-header-side site-header-side--start">
+    <ThemeToggle />
+  </div>
+  <a href="/" class="brand">
+    <img src="/images/ava-celeste-logo-on-dark.svg" alt="Ava Celeste" class="brand-logo" />
+  </a>
+  <div class="site-header-side site-header-side--end">
+    <OffCanvasMenu />
+  </div>
+</header>
+
+<style>
+  /* This header sits inside .site-gradient (see BaseLayout), which is dark at the top —
+     every color in here is chosen for legibility against that dark band, not against
+     var(--color-bg)/var(--color-text), which are the page's light/dark THEME colors and
+     happen to be near-black in light mode — that combination was invisible here before. */
+  /* Logo centered, hamburger + theme toggle balanced on either side — nav itself now
+     lives entirely in OffCanvasMenu, used at every breakpoint, not just mobile. */
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.5rem;
+    color: var(--near-white);
+  }
+  .site-header-side {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+  }
+  .site-header-side--start {
+    justify-content: flex-start;
+  }
+  .site-header-side--end {
+    justify-content: flex-end;
+  }
+  .brand {
+    display: inline-flex;
+    text-decoration: none;
+    flex: 0 0 auto;
+  }
+  .brand-logo {
+    height: 2.75rem;
+    width: auto;
+    display: block;
+  }
+  /* ThemeToggle is a child component; its .theme-toggle rule in theme.css uses
+     var(--color-text)/var(--color-border), invisible here against the dark gradient top. */
+  .site-header :global(.theme-toggle) {
+    color: var(--near-white);
+    border-color: var(--near-white);
+  }
+  .site-header :global(.theme-toggle:hover) {
+    border-color: var(--color-accent-gold);
+    color: var(--color-accent-gold);
+  }
+</style>

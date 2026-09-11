@@ -1,0 +1,149 @@
+---
+// Hero — one slice_type, three variations (see PRISMIC-SLICES.md for the
+// Type Builder field spec Toni models in her Prismic dashboard):
+//   split     — text left, photo right (ported from component-style-sheet
+//               #hero-split)
+//   overlay   — full-bleed photo, dark gradient, text overlaid at the bottom
+//               (#hero-overlay)
+//   plain     — full-bleed photo, NO overlay, caption band below it
+//               (#hero-plain)
+import { isFilled, asImageSrc, type Slice } from "../../lib/prismicio.ts";
+
+interface HeroPrimary {
+  eyebrow?: string | null;
+  heading?: string | null;
+  // The single phrase rendered in the script accent font/blush color, e.g.
+  // "manic pixie dream" inside "Your manic pixie dream girl." Optional —
+  // if left blank the heading just renders plain.
+  accent_phrase?: string | null;
+  body?: string | null;
+  image?: any;
+}
+
+interface Props {
+  slice: Slice<"hero", "split" | "overlay" | "plain", HeroPrimary>;
+}
+const { slice } = Astro.props;
+const { eyebrow, heading, accent_phrase, body, image } = slice.primary;
+
+// Splits "Your manic pixie dream girl." into ["Your ", "manic pixie dream", " girl."]
+// so the accent phrase alone gets the accent-text treatment.
+function splitHeading(full: string | null | undefined, accent: string | null | undefined) {
+  if (!full) return { before: "", accent: "", after: "" };
+  if (!accent) return { before: full, accent: "", after: "" };
+  const idx = full.indexOf(accent);
+  if (idx === -1) return { before: full, accent: "", after: "" };
+  return {
+    before: full.slice(0, idx),
+    accent,
+    after: full.slice(idx + accent.length),
+  };
+}
+const headingParts = splitHeading(heading, accent_phrase);
+const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1600 }) : null;
+---
+
+{slice.variation === "split" && (
+  <div class="hero-split reveal">
+    <div class="hero-split-text">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {heading && (
+        <h1>{headingParts.before}{headingParts.accent && <span class="accent-text">{headingParts.accent}</span>}{headingParts.after}</h1>
+      )}
+      {body && <p>{body}</p>}
+    </div>
+    <div class="hero-split-photo" style={imgUrl ? `background-image:url(${imgUrl})` : ""}></div>
+  </div>
+)}
+
+{slice.variation === "overlay" && (
+  <div class="hero-full reveal" style={imgUrl ? `background-image:url(${imgUrl})` : ""}>
+    <div class="hero-full-inner">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {heading && (
+        <h1>{headingParts.before}{headingParts.accent && <span class="accent-text">{headingParts.accent}</span>}{headingParts.after}</h1>
+      )}
+      {body && <p>{body}</p>}
+    </div>
+  </div>
+)}
+
+{slice.variation === "plain" && (
+  <>
+    <div class="hero-full-plain-photo reveal" style={imgUrl ? `background-image:url(${imgUrl})` : ""}></div>
+    <div class="hero-full-plain-caption">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {heading && (
+        <h1>{headingParts.before}{headingParts.accent && <span class="accent-text">{headingParts.accent}</span>}{headingParts.after}</h1>
+      )}
+    </div>
+  </>
+)}
+
+<style>
+  .hero-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 60vh;
+    background: var(--color-surface);
+  }
+  .hero-split-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+    max-width: 30rem;
+  }
+  .hero-split-photo {
+    background-color: var(--warm-off-white);
+    background-size: cover;
+    background-position: center;
+  }
+  .hero-full {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+    background-color: var(--near-black);
+    background-size: cover;
+    background-position: center;
+    color: var(--near-white);
+  }
+  .hero-full::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(20, 18, 16, 0.72) 0%, rgba(20, 18, 16, 0.15) 55%, rgba(20, 18, 16, 0.4) 100%);
+  }
+  .hero-full h1 { color: var(--near-white); }
+  .hero-full-inner {
+    position: relative;
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 3.5rem;
+    width: 100%;
+  }
+  .hero-full-plain-photo {
+    min-height: 46vh;
+    background-color: var(--warm-off-white);
+    background-size: cover;
+    background-position: center;
+  }
+  .hero-full-plain-caption {
+    background: var(--color-surface-alt);
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.75rem;
+    font-family: var(--font-menu);
+    color: var(--color-accent-gold);
+    margin: 0 0 0.75rem;
+  }
+  .accent-text { font-family: var(--font-accent); color: var(--blush); }
+  @media (max-width: 700px) {
+    .hero-split { grid-template-columns: 1fr; }
+  }
+</style>

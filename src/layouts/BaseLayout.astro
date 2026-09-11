@@ -1,0 +1,79 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ScrollReveal from "../components/ScrollReveal.astro";
+import "../styles/theme.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+  // Set true for any page built from Prismic slices (<SliceZone />). The
+  // component library's sections (hero, CTA bands, etc.) are designed to
+  // bleed edge-to-edge — each slice sets its own internal max-width where
+  // text needs to stay readable — so a slice-driven page needs <main> to
+  // stop capping everything at 900px the way the hand-written prose pages
+  // (Me, Contact, etc.) want. Those prose pages should leave this false.
+  fullBleed?: boolean;
+}
+const {
+  title,
+  description = "Ava Celeste — mature escort, Richmond VA.",
+  noindex = false,
+  fullBleed = false,
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} · Ava Celeste</title>
+  <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+  <!-- Favicons (from site.webmanifest / RealFaviconGenerator output) -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Adobe Fonts kit — Bodoni Moda Variable (header/serif), Peridot PE Variable (body/sans),
+       Lindsey Signature (accent/script). Project ID is public/safe to embed. -->
+  <link rel="stylesheet" href="https://use.typekit.net/wfk2vcj.css" />
+
+  <!-- Self-hosted accent script font -->
+  <style>
+    @font-face {
+      font-family: "Summer Pisces";
+      src: url("/fonts/summer-pisces.woff2") format("woff2");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+</head>
+<body>
+  <div class="site-gradient">
+    <Header />
+    <main class:list={{ "full-bleed": fullBleed }}>
+      <slot />
+    </main>
+  </div>
+  <Footer />
+  <ScrollReveal />
+</body>
+</html>
+
+<style is:global>
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  main.full-bleed {
+    max-width: none;
+    padding: 0;
+  }
+</style>

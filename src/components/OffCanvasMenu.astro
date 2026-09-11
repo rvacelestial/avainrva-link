@@ -1,0 +1,311 @@
+---
+// Full off-canvas nav, used at every breakpoint (not just mobile) — replaces the old
+// inline header nav row entirely. Panel is deliberately always-light (not theme-reactive),
+// per the WP version this replaces. Right-aligned throughout because the hamburger that
+// opens it lives on the right on every device.
+import { nav, social } from "../data/nav.js";
+
+const currentPath = Astro.url.pathname;
+const isActive = (href) => currentPath === href;
+
+// Flatten nav into rows once here, so the template stays a single simple loop:
+// a divider between each top-level item (but never between a parent and its own
+// children — the indent alone marks that relationship), then the item itself,
+// then any of its children indented right under it.
+const navRows = [];
+nav.forEach((item, i) => {
+  if (i > 0) navRows.push({ type: "divider" });
+  navRows.push({ type: "link", label: item.label, href: item.href, child: false, active: isActive(item.href) });
+  (item.children ?? []).forEach((child) => {
+    navRows.push({ type: "link", label: child.label, href: child.href, child: true, active: isActive(child.href) });
+  });
+});
+---
+<button
+  id="menu-open-btn"
+  class="menu-toggle"
+  type="button"
+  aria-expanded="false"
+  aria-controls="off-canvas-panel"
+  aria-label="Open menu"
+>
+  <span class="hamburger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+</button>
+
+<div id="off-canvas-backdrop" class="off-canvas-backdrop" hidden></div>
+
+<nav id="off-canvas-panel" class="off-canvas-panel" aria-label="Primary" aria-hidden="true">
+  <div class="off-canvas-top-row">
+    <img src="/images/ava-website-logo.png" alt="" class="off-canvas-mark" />
+    <button id="menu-close-btn" class="menu-close" type="button" aria-label="Close menu">&times;</button>
+  </div>
+
+  <div class="off-canvas-intro">
+    <p class="off-canvas-blurb">[A short, warm introduction line — a sentence or two, once you've written it.]</p>
+    <div class="off-canvas-photo" aria-hidden="true">Photo</div>
+  </div>
+
+  <ul class="off-canvas-links">
+    {navRows.map((row) => (
+      row.type === "divider" ? (
+        <li class="nav-divider" aria-hidden="true"></li>
+      ) : (
+        <li class={`nav-item${row.child ? " nav-item--child" : ""}${row.active ? " active" : ""}`}>
+          <a href={row.href} aria-current={row.active ? "page" : undefined}>
+            {row.child && <span class="child-arrow" aria-hidden="true">&rsaquo;</span>}
+            {row.label}
+          </a>
+        </li>
+      )
+    ))}
+  </ul>
+
+  <ul class="off-canvas-social">
+    {social.map((item) => (
+      <li><a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a></li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  /* --- hamburger button: color inherited from wherever it's placed (see Header.astro) --- */
+  .menu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+  }
+  .hamburger-lines {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 1.5rem;
+  }
+  .hamburger-lines span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: currentColor;
+  }
+
+  /* --- backdrop --- */
+  .off-canvas-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 18, 16, 0.45);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 200;
+  }
+  .off-canvas-backdrop.visible {
+    opacity: 1;
+  }
+
+  /* --- panel: always light, regardless of the site's light/dark theme --- */
+  .off-canvas-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 80vw;
+    background: #f9f4f1;
+    color: #222222;
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 2.25rem;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .off-canvas-panel.open {
+    transform: translateX(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .off-canvas-panel { transition: none; }
+    .off-canvas-backdrop { transition: none; }
+  }
+
+  .off-canvas-top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .off-canvas-mark {
+    width: 4.5rem;
+    height: auto;
+  }
+  .menu-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #222222;
+    padding: 0.25rem 0.5rem;
+  }
+  .menu-close:hover {
+    color: #c9a24b;
+  }
+
+  .off-canvas-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 0.75rem;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #cccccc;
+  }
+  .off-canvas-blurb {
+    font-family: "Peridot PE Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.85rem;
+    color: #3a3a3e;
+    max-width: 20rem;
+    margin: 0;
+  }
+  .off-canvas-photo {
+    width: 5rem;
+    height: 5rem;
+    background: #e6dfd4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Peridot PE Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #3a3a3e;
+  }
+
+  .off-canvas-links {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+    flex: 1;
+    text-align: right;
+  }
+  .nav-divider {
+    border-top: 1px solid #dcd5cc;
+    margin: 0.85rem 0;
+  }
+  .nav-item {
+    padding: 0.15rem 0.4rem;
+    margin: 0 -0.4rem;
+  }
+  .nav-item a {
+    display: inline-block;
+    font-family: "Bodoni Moda Variable", Georgia, serif;
+    font-size: clamp(1.5rem, 2vw + 1rem, 2.1rem);
+    color: #222222;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .nav-item a:hover {
+    color: #c9a24b;
+  }
+  /* Sub-pages: indented (pulled in from the right edge, since this list is right-aligned),
+     marked with a small arrow, only slightly smaller than a parent item — no divider
+     between a parent and its own children, the indent + arrow together mark the relationship. */
+  .nav-item--child {
+    padding-right: 1.75rem;
+  }
+  .nav-item--child a {
+    font-size: clamp(1.3rem, 1.6vw + 0.9rem, 1.75rem);
+    color: #3a3a3e;
+  }
+  .child-arrow {
+    display: inline-block;
+    color: #c9a24b;
+    margin-right: 0.35rem;
+  }
+  /* Current-page highlight — a soft gold-tinted bar behind the active item, square corners
+     to match the rest of the site's card language. */
+  .nav-item.active {
+    background: rgba(201, 162, 75, 0.16);
+  }
+  .nav-item.active a {
+    color: #a9822f;
+  }
+
+  .off-canvas-social {
+    list-style: none;
+    margin: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid #cccccc;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .off-canvas-social a {
+    font-family: "Peridot PE Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #3a3a3e;
+    text-decoration: none;
+  }
+  .off-canvas-social a:hover {
+    color: #c9a24b;
+  }
+
+  body.menu-open-lock {
+    overflow: hidden;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    const openBtn = document.getElementById("menu-open-btn");
+    const closeBtn = document.getElementById("menu-close-btn");
+    const panel = document.getElementById("off-canvas-panel");
+    const backdrop = document.getElementById("off-canvas-backdrop");
+    if (!openBtn || !closeBtn || !panel || !backdrop) return;
+
+    let lastFocused = null;
+
+    function openMenu() {
+      lastFocused = document.activeElement;
+      backdrop.hidden = false;
+      requestAnimationFrame(() => {
+        panel.classList.add("open");
+        backdrop.classList.add("visible");
+      });
+      panel.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.classList.add("menu-open-lock");
+      const firstLink = panel.querySelector("a");
+      if (firstLink) firstLink.focus();
+      document.addEventListener("keydown", onKeydown);
+    }
+
+    function closeMenu() {
+      panel.classList.remove("open");
+      backdrop.classList.remove("visible");
+      panel.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("menu-open-lock");
+      document.removeEventListener("keydown", onKeydown);
+      window.setTimeout(() => {
+        backdrop.hidden = true;
+      }, 400);
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+
+    function onKeydown(e) {
+      if (e.key === "Escape") closeMenu();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    backdrop.addEventListener("click", closeMenu);
+  })();
+</script>

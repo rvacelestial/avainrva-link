@@ -1,0 +1,191 @@
+---
+// Reusable blog display — drop this anywhere on the site. Two variants:
+//   variant="card" (default) — the photo/tag/title/excerpt/link card grid.
+//   variant="list"           — an elegant text-only list: title, date, "Read
+//                               more" link. No tag, no excerpt, no photo.
+//
+// By default it shows the `limit` most recent posts. Pass `urls` (an array of
+// exact post URLs) to feature specific posts instead, in that order — e.g. a
+// post from a content-calendar conversation, or a themed set for one page.
+// See src/data/blog.js for the feed-window caveat: only the ~7 most recent
+// posts can be found by URL.
+import { getBlogPosts } from "../data/blog.js";
+
+interface Props {
+  variant?: "card" | "list";
+  limit?: number;
+  urls?: string[];
+}
+const { variant = "card", limit = 3, urls } = Astro.props;
+
+const posts = await getBlogPosts({ limit, urls });
+---
+{posts.length > 0 ? (
+  variant === "list" ? (
+    <ul class="blog-list">
+      {posts.map((post) => (
+        <li class="blog-list-item">
+          <div class="blog-list-heading">
+            <p class="blog-list-title">{post.title}</p>
+            {post.date && <p class="blog-list-date">{post.date}</p>}
+          </div>
+          <a href={post.url} target="_blank" rel="noopener noreferrer" class="blog-list-link">Read more &rarr;</a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <div class="blog-grid">
+      {posts.map((post) => (
+        <article class="blog-card">
+          {post.image ? (
+            <img src={post.image} alt="" class="blog-card-photo" loading="lazy" />
+          ) : (
+            <div class="blog-card-photo blog-card-photo--placeholder" aria-hidden="true"></div>
+          )}
+          <div class="blog-card-body">
+            <p class="blog-card-meta">
+              {post.tag && <span class="blog-card-tag">{post.tag}</span>}
+              {post.date && <span class="blog-card-date">{post.date}</span>}
+            </p>
+            <h3>{post.title}</h3>
+            {post.summary && <p class="blog-card-excerpt">{post.summary}</p>}
+            <a href={post.url} target="_blank" rel="noopener noreferrer">Read on the blog &rarr;</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+) : (
+  <p class="blog-empty">
+    New posts coming soon — <a href="https://escortrichmond.com/" target="_blank" rel="noopener noreferrer">visit the blog directly</a>.
+  </p>
+)}
+
+<style>
+  /* --- card variant: matches the component library's blog-card mockup (v1–v4) --- */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .blog-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+  }
+  .blog-card-photo {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .blog-card-photo--placeholder {
+    background: repeating-linear-gradient(135deg, var(--cream) 0px, var(--cream) 2px, var(--warm-off-white) 2px, var(--warm-off-white) 40px);
+  }
+  .blog-card-body {
+    padding: 1.25rem 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .blog-card-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .blog-card-tag {
+    font-family: var(--font-menu);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent-gold);
+  }
+  .blog-card-date {
+    font-family: var(--font-menu);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+  .blog-card h3 { font-size: 1.05rem; margin: 0.5em 0; }
+  .blog-card-excerpt {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+    flex: 1;
+  }
+  .blog-card-body a {
+    font-family: var(--font-menu);
+    font-size: 0.8rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-accent-gold);
+    color: var(--color-text);
+    align-self: flex-start;
+  }
+  @media (max-width: 760px) {
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+
+  /* --- list variant: elegant, text-only. Title + date on the left, a single
+     "Read more" link on the right, thin hairlines between rows — no tag, no
+     excerpt, no photo. Meant to sit comfortably inside a narrower column
+     than the card grid needs. */
+  .blog-list {
+    list-style: none;
+    margin: 1.5rem 0;
+    padding: 0;
+    max-width: 40rem;
+  }
+  .blog-list-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .blog-list-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+  .blog-list-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .blog-list-title {
+    font-family: var(--font-header);
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+  .blog-list-date {
+    font-family: var(--font-menu);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  .blog-list-link {
+    font-family: var(--font-menu);
+    font-size: 0.8rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-accent-gold);
+    color: var(--color-text);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  @media (max-width: 560px) {
+    .blog-list-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  /* --- shared empty state --- */
+  .blog-empty {
+    color: var(--color-text-muted);
+  }
+</style>

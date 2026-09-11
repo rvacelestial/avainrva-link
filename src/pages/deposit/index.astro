@@ -1,0 +1,263 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ObfuscatedEmail from "../../components/ObfuscatedEmail.astro";
+// NOTE: this page gets run through Staticrypt as a post-build step before publishing —
+// it should never ship un-encrypted. See build/deploy notes.
+---
+<BaseLayout title="Deposit Instructions" description="Deposit instructions for screened clients." noindex={true}>
+  <section>
+    <h1>Deposit Instructions</h1>
+    <p class="drop-cap">
+      I'm glad we've gotten this far. Below are my detailed instructions for making a deposit, but if you
+      have questions, don't hesitate to ask. It's better to ask than make a mistake that could shut down
+      these options for everyone.
+    </p>
+    <p>
+      I confirm deposits within 24hrs of you sending them. If more than 24hrs has passed and you haven't
+      heard back, something might have gone awry, particularly with electronic deposits.
+    </p>
+    <p>
+      YouPay/Cashapp/Zelle/Vanilla Visa are preferred. You can split the deposit among the methods if you
+      wish — just let me know. You have several options below, and two additional ones if you're
+      established. YouPay allows you to use your credit cards safely and discreetly, though they charge a
+      processing fee to stay in business.
+    </p>
+    <p>
+      If you wish to prepay in full, please make sure that transaction is finished/submitted at least
+      48hrs prior to our meeting. I'll need to be able to confirm receipt and troubleshoot if there are
+      issues (banks are overly concerned about security).
+    </p>
+    <p>
+      Once established, you have the option of direct credit card payment, or cash [discreetly]
+      overnighted to my business mailing address. Since these options are directly connected to my actual
+      business, they're offered at my discretion.
+    </p>
+  </section>
+
+  <section class="callout">
+    <p>
+      Please use the email address below — do <strong>not</strong> use my regular email address for
+      emailed gift cards, of any kind.
+    </p>
+    <p>Please copy and paste my alternate email address, not associated with this website (yes, that's with two Cs):</p>
+    <ObfuscatedEmail user="ac" domain="accreativerva.com" />
+    <p class="rules">
+      Feel free to use my initials [A.C.] if you need to fill in a name, and do not include a message. If
+      you feel you must, do not allude to any type of meeting, do not use the word "deposit," and do not
+      include calendar dates. Referring to photography is ideal but not required. The less said, the better.
+    </p>
+  </section>
+
+  <!-- Featured method: full-width, title/content split, gold accent bar — matches
+       the .callout treatment above. Bitcoin gets the same treatment below. -->
+  <section class="deposit-featured">
+    <h2>YouPay.me</h2>
+    <div class="deposit-featured-body">
+      <p>
+        You can use your regular credit card on the YouPay site. Go to
+        {" "}<a href="https://youpay.me/AvainRVA804" target="_blank" rel="noopener noreferrer">my profile</a>{" "}
+        , choose the Cash Gifts Wishlist (the one with a photo of money), choose the appropriate gift,
+        and check out. I'm still filling out my profile and gifts, so more options will appear with time.
+        I also have the ability to create a custom amount and send the link directly to you, if needed.
+      </p>
+      <p class="rules">
+        Feel free to use my initials [A.C.] if you need to fill in a name, and do not include a message. If
+        you feel you must, do not allude to any type of meeting, do not use the word "deposit," and do not
+        include calendar dates.
+      </p>
+      <p>If something in the process confuses you, don't proceed — choose a simpler method that you understand. Please don't create issues for everyone else who enjoys the convenience.</p>
+    </div>
+  </section>
+
+  <div class="deposit-grid">
+    <article class="deposit-card">
+      <h3>Cashapp</h3>
+      <p>If you already have and use Cashapp, you can send me the deposit or full amount via the app.</p>
+      <p><strong>My address is:</strong> @ACcreative</p>
+      <p>Please let me know if you're sending it this way so I know to look for it.</p>
+      <p class="rules">
+        Feel free to use my initials [A.C.] if you need to fill in a name, and do not include a message. If
+        you feel you must, do not allude to any type of meeting, do not use the word "deposit," and do not
+        include calendar dates.
+      </p>
+      <p>FYI: I confirm receipt via email, not in app.</p>
+    </article>
+
+    <article class="deposit-card">
+      <h3>Vanilla Visa — Option 1 (emailed gift card)</h3>
+      <p>
+        This is an emailed gift card. Please purchase only from the
+        {" "}<a href="https://www.vanillagift.com/" target="_blank" rel="noopener noreferrer">official website</a>{" "}
+        — I cannot guarantee the authenticity of any other source. Follow the emailed gift card
+        instructions above, using the email address on this page.
+      </p>
+    </article>
+
+    <article class="deposit-card">
+      <h3>Vanilla Visa — Option 2 (physical card)</h3>
+      <p>
+        Purchase a physical Vanilla Visa gift card in a store with cash (no electronic trail for
+        you!). Remove the cardboard packaging and any stickers, and photograph the front and back of
+        the card. Email me the photos — make sure nothing obstructs the card number, expiration date,
+        or security code.
+      </p>
+      <p><a href="https://www.vanillagift.com/help/where-to-buy" target="_blank" rel="noopener noreferrer">Store locator</a></p>
+    </article>
+
+    <article class="deposit-card">
+      <h3>Zelle</h3>
+      <p>If you'd like to make a bank transfer using Zelle, it's quite easy — please use the email address on this page.</p>
+      <p class="rules">
+        Feel free to use my initials [A.C.] if you need to fill in a name, and do not include a message. If
+        you feel you must, do not allude to any type of meeting, do not use the word "deposit," and do not
+        include calendar dates.
+      </p>
+    </article>
+
+    <article class="deposit-card">
+      <h3>Amazon — Option 1 (emailed gift card)</h3>
+      <p>Use the emailed gift card instructions above, with the email address on this page.</p>
+      <p class="rules">
+        Feel free to use my initials [A.C.] if you need to fill in a name, and do not include a message. If
+        you feel you must, do not allude to any type of meeting, do not use the word "deposit," and do not
+        include calendar dates.
+      </p>
+      <p>Amazon is for deposits only, not for paying the full balance — use one of the other options for that.</p>
+      <p><a href="#" class="link-todo">Amazon emailed gift cards</a></p>
+      <!-- TODO(Toni): couldn't verify Amazon's official e-gift-card URL — their robots.txt blocks
+           every path I tried, so I didn't want to guess on a payment-adjacent link. Since you
+           already have this link live on the WP page, easiest is just pasting it to me. -->
+    </article>
+
+    <article class="deposit-card">
+      <h3>Amazon — Option 2 (physical card)</h3>
+      <p>
+        Find physical Amazon gift cards in any store. Purchase with cash, remove packaging and
+        stickers, and photograph the back of the card with the gift code visible in full. If the code
+        is under a scratch-off coating, be careful not to scratch off the code itself.
+      </p>
+    </article>
+  </div>
+
+  <section class="deposit-featured">
+    <h2>Bitcoin / BTC</h2>
+    <div class="deposit-featured-body deposit-featured-body--split">
+      <div class="deposit-featured-text">
+        <p>
+          In case you're wondering, I use Bitcoin to pay for advertising — I'm not investing in
+          crypto or NFTs. My Bitcoin wallet QR code (currently Blue Wallet) is below.
+        </p>
+        <p>
+          Because of the inevitable changes in laws regarding crypto purchases, a simple tutorial
+          isn't enough to cover what a first-time or anonymity-minded user needs to know. However,
+          if you already know what you're doing and use BTC, you're welcome to pay the deposit that
+          way.
+        </p>
+      </div>
+      <!-- Drop the real QR code image at /public/images/btc-wallet-qr.jpg and swap the placeholder
+           div below for: <img src="/images/btc-wallet-qr.jpg" alt="Bitcoin wallet QR code" class="deposit-qr-image" /> -->
+      <div class="deposit-qr">
+        <div class="deposit-qr-placeholder" aria-hidden="true">QR code</div>
+        <p class="deposit-qr-caption">[Drop the real QR image at /public/images/btc-wallet-qr.jpg]</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Thank you so much!</h2>
+    <p>I appreciate your trust, and we'll be meeting soon.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .callout {
+    background: var(--color-surface-alt);
+    border-left: 3px solid var(--color-accent-gold);
+    padding: 1rem 1.25rem;
+  }
+  .rules { font-size: 0.88rem; color: var(--color-text-muted); }
+  .cta { text-align: center; margin-top: 2rem; }
+
+  /* --- featured panels: YouPay + Bitcoin, full-width, title/content split with a
+     gold accent bar (same idiom as .callout above, for consistency within this page). --- */
+  .deposit-featured {
+    background: var(--color-surface-alt);
+    border-left: 3px solid var(--color-accent-gold);
+    padding: 1.5rem 1.75rem;
+    display: grid;
+    grid-template-columns: minmax(9rem, 14rem) 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .deposit-featured h2 { margin: 0; }
+  .deposit-featured-body p:first-child { margin-top: 0; }
+  .deposit-featured-body p:last-child { margin-bottom: 0; }
+  .deposit-featured-body--split {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (max-width: 640px) {
+    .deposit-featured,
+    .deposit-featured-body--split {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* --- the six standard methods: a real grid, DOM order = visual order (no CSS
+     `order` used anywhere), so reading order and tab order both stay exactly as
+     written — collapses to one column on narrow screens without reshuffling. --- */
+  .deposit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  .deposit-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .deposit-card h3 { font-size: 1.05rem; margin: 0 0 0.6rem; }
+  .deposit-card p { font-size: 0.9rem; margin: 0 0 0.6rem; }
+  .deposit-card p:last-child { margin-bottom: 0; }
+  @media (max-width: 760px) {
+    .deposit-grid { grid-template-columns: 1fr; }
+  }
+
+  /* --- QR code slot --- */
+  .deposit-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 10rem;
+  }
+  .deposit-qr-placeholder {
+    width: 10rem;
+    height: 10rem;
+    background: repeating-linear-gradient(135deg, var(--cream) 0px, var(--cream) 2px, var(--warm-off-white) 2px, var(--warm-off-white) 40px);
+    border: 1px dashed var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+  .deposit-qr-image { width: 10rem; height: 10rem; display: block; }
+  .deposit-qr-caption {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Visible marker for links needing a real URL — impossible to miss, easy to grep for. */
+  .link-todo {
+    color: var(--color-accent-gold);
+    text-decoration: underline wavy;
+  }
+</style>

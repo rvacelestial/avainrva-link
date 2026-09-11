@@ -1,0 +1,54 @@
+---
+// Stats bar — one slice_type, one variation. Ported from
+// component-style-sheet #stats — a strong match for the "Physically" list
+// on /me/. `items` is the slice's Repeatable Zone in Prismic: one row per
+// stat, add/remove rows freely from the page editor without touching code.
+import type { Slice } from "../../lib/prismicio.ts";
+
+interface StatItem {
+  number?: string | null;
+  label?: string | null;
+}
+interface Props {
+  slice: Slice<"stats_bar", "default", Record<string, never>, StatItem>;
+}
+const { slice } = Astro.props;
+---
+
+<div class="stats-bar reveal">
+  <div class="stats-row">
+    {slice.items.map((item) => (
+      <div>
+        <div class="stat-number">{item.number}</div>
+        <div class="stat-label">{item.label}</div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .stats-bar { background: var(--color-surface-alt); text-align: center; padding: 3.5rem 1.5rem; }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 55rem;
+    margin: 0 auto;
+    gap: 1.5rem;
+  }
+  .stat-number {
+    font-family: var(--font-header);
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--color-text);
+  }
+  .stat-label {
+    font-family: var(--font-menu);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+  }
+  @media (max-width: 700px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); row-gap: 2rem; }
+  }
+</style>
