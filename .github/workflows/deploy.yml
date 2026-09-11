@@ -1,6 +1,6 @@
 name: Build and deploy to Namecheap
 
-# NOTE (Toni): this replaces the old GitHub Pages workflow. GitHub Pages on a
+# NOTE: this replaces the old GitHub Pages workflow. GitHub Pages on a
 # free account only works from a PUBLIC repo — anyone who found the repo could
 # browse every file in it, including uploaded images and test pages. Since the
 # repo is now (or will be) private, Pages is no longer an option, and it's not
@@ -43,14 +43,14 @@ jobs:
         # dist/deposit/index.html (and later, the archive section) before deploy.
 
       - name: Deploy dist/ to Namecheap over SSH
-        uses: easingthemes/ssh-deploy@v5
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
           SSH_PRIVATE_KEY: ${{ secrets.NAMECHEAP_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.NAMECHEAP_HOST }}
           REMOTE_USER: ${{ secrets.NAMECHEAP_USER }}
           REMOTE_PORT: ${{ secrets.NAMECHEAP_SSH_PORT }}
           SOURCE: "dist/"
-          # TODO(Toni): confirm the exact folder Namecheap serves your domain
+          # TODO: confirm the exact folder Namecheap serves your domain
           # from — usually public_html/ for the primary domain, or
           # public_html/subdomain/ for an addon domain. Update TARGET below
           # to match once confirmed.

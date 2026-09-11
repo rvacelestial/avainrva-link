@@ -3,7 +3,7 @@
 // never in a visitor's browser. Prismic itself is fully hosted on Prismic's
 // own infrastructure — nothing to install, nothing running on Namecheap.
 //
-// Toni's real Prismic repository ID, from the repo she created during setup.
+// Your real Prismic repository ID, from the repo you created during setup.
 // If a second (e.g. staging) repo is ever needed, swap this one line.
 export const repositoryName = "b7egqvky";
 
@@ -18,7 +18,7 @@ export const client = prismic.createClient(repositoryName, {
 });
 
 // Minimal hand-written slice shape (no Slice Machine / codegen in this
-// project — Toni models slices directly in the Prismic dashboard, per
+// project — you model slices directly in the Prismic dashboard, per
 // PRISMIC-SLICES.md). This matches what the real API returns for any slice:
 // `primary` holds the "Non-repeatable zone" fields, `items` holds the
 // "Repeatable zone" fields (one array entry per repeated row).

@@ -165,7 +165,7 @@ real `.astro` components):
 
 Two separate newsletters to plan: the main site's newsletter (footer signup form already
 exists as a placeholder in `Footer.astro`) and a separate blog-update letter (for
-escortrichmond.com, the Publii blog on its own domain). Toni has self-hosted
+escortrichmond.com, the Publii blog on its own domain). You've self-hosted
 [Sendy](https://sendy.co/) on AWS before and would use it again, but needs help with setup —
 she can't configure it herself. Sendy is a paid one-time-license PHP app you run on your own
 server (SES for sending), not a SaaS signup — this needs its own dedicated setup session:
@@ -176,25 +176,25 @@ deliverability, and then wiring the two signup forms (main site + blog) to it.
 
 Sitepins and Keystatic were both evaluated and ruled out along the way (Sitepins' admin UI
 never worked reliably enough to test; Keystatic's insert-component system works but is a
-plain-text/rich-text editing experience, not the visual slice picker Toni wanted). **Prismic
+plain-text/rich-text editing experience, not the visual slice picker you wanted). **Prismic
 won**: it's fully hosted (nothing installed on Namecheap or anywhere else — see
 `src/lib/prismicio.ts`), the Astro build only calls its API at build time (same pattern as
 the existing blog-feed fetch), and it gives a real visual page builder — add, remove, and
 reorder pre-built sections on any page, no plain textboxes.
 
-Toni's real Prismic repository ID is `b7egqvky`. The actual component library — 11 slice
+Your real Prismic repository ID is `b7egqvky`. The actual component library — 11 slice
 types, several with multiple variations, covering everything from the original design phase
 (hero, pull quote, text+photo split, bio+quote, stats bar, testimonials, photo gallery with
-lightbox, blog cards, accordion, tabs) plus two new CTA layouts Toni asked for (a 50/50 split
+lightbox, blog cards, accordion, tabs) plus two new CTA layouts you asked for (a 50/50 split
 CTA, and a CTA in a colored box over a background image/video) — is built as real `.astro`
 components in `src/components/slices/`, rendered by `src/components/SliceZone.astro`. See
 **`PRISMIC-SLICES.md`** for the exact field spec to model each slice in Prismic's own Type
-Builder (Toni does this herself in her dashboard — there's no API access to create it
+Builder (you do this yourself in your dashboard — there's no API access to create it
 remotely). Verified end-to-end with a temporary mock-data test page (screenshotted, then
 deleted) before this note was written: every variation renders correctly off the real design
 tokens, and the interactive ones (tabs, accordion, gallery lightbox) actually work.
 
-Not yet done: no real page fetches from Prismic yet, since Toni hasn't modeled the slices in
+Not yet done: no real page fetches from Prismic yet, since you haven't modeled the slices in
 her dashboard yet. `PRISMIC-SLICES.md` has the one-file wiring snippet for whenever a page is
 ready to move over. Existing hand-written pages (Home, Me, Contact, Deposit) are untouched
 and keep working exactly as before in the meantime — the slice library and today's site
