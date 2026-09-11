@@ -1,0 +1,12 @@
+# Temporary whole-site password wall while the site is still being built out
+# in Prismic. This ships with every deploy (this file lives in public/, which
+# Astro copies as-is into dist/, so it lands at the docroot root on every
+# push) — no need to ever redo this by hand in cPanel again. Matches the
+# credentials set up via cPanel's Directory Privacy tool; the actual password
+# lives only in the AuthUserFile below, never in this repo.
+#
+# TODO: remove this whole file once the site is ready for real visitors.
+AuthType Basic
+AuthName "UnderConstruction"
+AuthUserFile "/home/thefuytb/.htpasswds/avainrva.com/passwd"
+Require valid-user
