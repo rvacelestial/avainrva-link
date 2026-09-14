@@ -1,0 +1,81 @@
+---
+// Text layout — a single-column prose slice for long-form copy (about
+// pages, policies, longer stories). Three variations:
+//   default           — plain heading + rich-text body.
+//   drop_cap          — same, first letter of the first paragraph gets the
+//                       large drop-cap treatment (theme already has the
+//                       look via TextPhotoSplit's `.drop-cap` class; this
+//                       slice defines its own copy of the same rule so it
+//                       doesn't depend on that other slice being present).
+//   pull_quote_inline — same, plus an optional short quote that floats
+//                       beside the text instead of sitting in its own
+//                       banded slice.
+import { asHTML, isFilled, type Slice } from "../../lib/prismicio.ts";
+
+interface TextLayoutPrimary {
+  heading?: string | null;
+  body?: any;
+  pull_quote?: string | null;
+}
+interface Props {
+  slice: Slice<"text_layout", "default" | "drop_cap" | "pull_quote_inline", TextLayoutPrimary>;
+}
+const { slice } = Astro.props;
+// See Hero.astro's comment — a slice modeled without an explicit variation
+// (the norm for legacy/non-shared slices) comes back with no "variation" at
+// all, so default it to "default" rather than rendering nothing.
+if (!slice.variation) (slice as any).variation = "default";
+const { heading, body, pull_quote } = slice.primary;
+const bodyHtml = isFilled.richText(body) ? asHTML(body) : null;
+const dropCap = slice.variation === "drop_cap";
+const withQuote = slice.variation === "pull_quote_inline";
+---
+
+<div class="text-layout reveal">
+  {heading && <h2>{heading}</h2>}
+  <div class:list={["text-layout-body", { "drop-cap": dropCap }]}>
+    {withQuote && pull_quote && <blockquote class="text-layout-pullquote">{pull_quote}</blockquote>}
+    {bodyHtml && <Fragment set:html={bodyHtml} />}
+  </div>
+</div>
+
+<style>
+  .text-layout {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    background: var(--color-surface);
+  }
+  .text-layout h2 { text-align: center; margin-top: 0; }
+  .text-layout-body :global(p) {
+    color: var(--color-text-muted);
+    line-height: 1.75;
+  }
+  .drop-cap :global(p:first-of-type::first-letter) {
+    font-family: var(--font-header);
+    float: left;
+    font-size: 3.2em;
+    line-height: 0.82;
+    padding-right: 0.09em;
+    color: var(--color-accent-gold);
+  }
+  .text-layout-pullquote {
+    float: right;
+    width: 45%;
+    margin: 0 0 1rem 1.5rem;
+    padding: 0 0 0 1.25rem;
+    border-left: 3px solid var(--color-accent-gold);
+    font-family: var(--font-header);
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+  @media (max-width: 620px) {
+    .text-layout-pullquote {
+      float: none;
+      width: auto;
+      margin: 0 0 1.5rem;
+    }
+  }
+</style>

@@ -3,9 +3,10 @@
 // never in a visitor's browser. Prismic itself is fully hosted on Prismic's
 // own infrastructure — nothing to install, nothing running on Namecheap.
 //
-// Your real Prismic repository ID, from the repo you created during setup.
-// If a second (e.g. staging) repo is ever needed, swap this one line.
-export const repositoryName = "b7egqvky";
+// Your real Prismic repository ID ("Avainrva" is the repo's display name;
+// "avacel" is its actual API slug). If a second (e.g. staging) repo is ever
+// needed, swap this one line.
+export const repositoryName = "avacel";
 
 import * as prismic from "@prismicio/client";
 

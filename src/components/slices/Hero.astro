@@ -24,6 +24,12 @@ interface Props {
   slice: Slice<"hero", "split" | "overlay" | "plain", HeroPrimary>;
 }
 const { slice } = Astro.props;
+// Legacy (non-shared) Prismic slices modeled straight in a custom type's
+// own JSON don't always come back with a "variation" — that's a shared-
+// slice-only concept. Falling back to "overlay" here means a slice built
+// without any variation set up still renders (using the most general-
+// purpose look) instead of silently rendering nothing.
+if (!slice.variation) (slice as any).variation = "overlay";
 const { eyebrow, heading, accent_phrase, body, image } = slice.primary;
 
 // Splits "Your manic pixie dream girl." into ["Your ", "manic pixie dream", " girl."]

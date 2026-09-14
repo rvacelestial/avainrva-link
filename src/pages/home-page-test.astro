@@ -1,0 +1,22 @@
+---
+// A test route for the "Home Page" Single Type (API ID: home_page) modeled
+// in Prismic — UID field + a real Slice Zone (Hero, Text Layout), added
+// directly through the custom type's JSON editor. This goes through
+// SliceZone.astro exactly like a slice-driven page would, so whatever
+// slices get added/reordered in Prismic show up here automatically — no
+// code changes needed as the draft grows.
+//
+// This is deliberately its OWN route, not src/pages/index.astro. The real
+// homepage there is finished, hand-written copy — this file exists purely
+// to prove the Prismic → Astro pipeline end-to-end, and only becomes the
+// actual homepage if/when you decide to swap it in. noindex is on since
+// this is placeholder test content, not a real page for search engines.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SliceZone from "../components/SliceZone.astro";
+import { client } from "../lib/prismicio.ts";
+
+const page = await client.getSingle("home_page");
+---
+<BaseLayout title="Home (Prismic test)" noindex fullBleed>
+  <SliceZone slices={page.data.slices} />
+</BaseLayout>

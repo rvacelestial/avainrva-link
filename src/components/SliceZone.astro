@@ -8,6 +8,7 @@
 // below, and model the fields in Prismic (see PRISMIC-SLICES.md) — nothing
 // else in the site needs to change.
 import Hero from "./slices/Hero.astro";
+import TextLayout from "./slices/TextLayout.astro";
 import PullQuote from "./slices/PullQuote.astro";
 import TextPhotoSplit from "./slices/TextPhotoSplit.astro";
 import BioQuote from "./slices/BioQuote.astro";
@@ -22,6 +23,7 @@ import type { Slice } from "../lib/prismicio.ts";
 
 const sliceComponents: Record<string, any> = {
   hero: Hero,
+  text_layout: TextLayout,
   pull_quote: PullQuote,
   text_photo_split: TextPhotoSplit,
   bio_quote: BioQuote,
