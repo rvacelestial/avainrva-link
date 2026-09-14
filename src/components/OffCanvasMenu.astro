@@ -52,7 +52,6 @@ nav.forEach((item, i) => {
       ) : (
         <li class={`nav-item${row.child ? " nav-item--child" : ""}${row.active ? " active" : ""}`}>
           <a href={row.href} aria-current={row.active ? "page" : undefined}>
-            {row.child && <span class="child-arrow" aria-hidden="true">&rsaquo;</span>}
             {row.label}
           </a>
         </li>
@@ -212,19 +211,18 @@ nav.forEach((item, i) => {
     color: #c9a24b;
   }
   /* Sub-pages: indented (pulled in from the right edge, since this list is right-aligned),
-     marked with a small arrow, only slightly smaller than a parent item — no divider
-     between a parent and its own children, the indent + arrow together mark the relationship. */
+     italicized and slightly smaller/muted than a parent item — no divider between a parent
+     and its own children, the indent + italic + size/color together mark the relationship.
+     (A previous version marked sub-pages with a small arrow instead of italics — dropped
+     after Toni found it read as a click-to-expand toggle, especially when a sub-page's
+     label ran longer than its parent's; italics don't carry that expand-affordance risk.) */
   .nav-item--child {
     padding-right: 1.75rem;
   }
   .nav-item--child a {
     font-size: clamp(1.3rem, 1.6vw + 0.9rem, 1.75rem);
+    font-style: italic;
     color: #3a3a3e;
-  }
-  .child-arrow {
-    display: inline-block;
-    color: #c9a24b;
-    margin-right: 0.35rem;
   }
   /* Current-page highlight — a soft gold-tinted bar behind the active item, square corners
      to match the rest of the site's card language. */
