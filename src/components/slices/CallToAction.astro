@@ -11,6 +11,8 @@
 import { isFilled, asImageSrc, asLink, type Slice } from "../../lib/prismicio.ts";
 
 interface CallToActionPrimary {
+  // Real "Style" pick-list field in Prismic — choosable per instance.
+  style?: "band" | "split" | "image_background" | null;
   heading?: string | null;
   body?: string | null;
   button_label?: string | null;
@@ -25,16 +27,14 @@ interface Props {
   slice: Slice<"call_to_action", "band" | "split" | "image_background", CallToActionPrimary>;
 }
 const { slice } = Astro.props;
-// See Hero.astro's comment — a slice modeled without an explicit variation
-// comes back with none at all, so default it rather than rendering nothing.
-if (!slice.variation) (slice as any).variation = "band";
+const variation = slice.primary.style || "band";
 const { heading, body, button_label, button_link, image, background_video } = slice.primary;
 const href = isFilled.link(button_link) ? asLink(button_link) : null;
 const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1600 }) : null;
 const videoUrl = isFilled.link(background_video) ? asLink(background_video) : null;
 ---
 
-{slice.variation === "band" && (
+{variation === "band" && (
   <div class="cta-band reveal">
     {heading && <h2>{heading}</h2>}
     {body && <p>{body}</p>}
@@ -42,7 +42,7 @@ const videoUrl = isFilled.link(background_video) ? asLink(background_video) : nu
   </div>
 )}
 
-{slice.variation === "split" && (
+{variation === "split" && (
   <div class="cta-split reveal">
     <div class="cta-split-text">
       {heading && <h2>{heading}</h2>}
@@ -53,7 +53,7 @@ const videoUrl = isFilled.link(background_video) ? asLink(background_video) : nu
   </div>
 )}
 
-{slice.variation === "image_background" && (
+{variation === "image_background" && (
   <div class="cta-image-bg reveal">
     {videoUrl ? (
       <video class="cta-bg-media" src={videoUrl} autoplay muted loop playsinline></video>

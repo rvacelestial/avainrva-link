@@ -6,6 +6,8 @@
 import { asHTML, asImageSrc, isFilled, type Slice } from "../../lib/prismicio.ts";
 
 interface TextPhotoSplitPrimary {
+  // Real "Style" pick-list field in Prismic — choosable per instance.
+  style?: "default" | "reversed" | null;
   heading?: string | null;
   body?: any;
   drop_cap?: boolean;
@@ -18,7 +20,7 @@ const { slice } = Astro.props;
 const { heading, body, drop_cap, image } = slice.primary;
 const bodyHtml = isFilled.richText(body) ? asHTML(body) : null;
 const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1200 }) : null;
-const reversed = slice.variation === "reversed";
+const reversed = (slice.primary.style || "default") === "reversed";
 ---
 
 <div class:list={["split", "reveal", { reversed }]}>

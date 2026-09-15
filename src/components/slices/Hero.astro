@@ -10,6 +10,9 @@
 import { isFilled, asImageSrc, type Slice } from "../../lib/prismicio.ts";
 
 interface HeroPrimary {
+  // Which of the three looks to render — a real "Style" pick-list field in
+  // Prismic now, so it's actually choosable per instance from the editor.
+  style?: "split" | "overlay" | "plain" | null;
   eyebrow?: string | null;
   heading?: string | null;
   // The single phrase rendered in the script accent font/blush color, e.g.
@@ -24,12 +27,7 @@ interface Props {
   slice: Slice<"hero", "split" | "overlay" | "plain", HeroPrimary>;
 }
 const { slice } = Astro.props;
-// Legacy (non-shared) Prismic slices modeled straight in a custom type's
-// own JSON don't always come back with a "variation" — that's a shared-
-// slice-only concept. Falling back to "overlay" here means a slice built
-// without any variation set up still renders (using the most general-
-// purpose look) instead of silently rendering nothing.
-if (!slice.variation) (slice as any).variation = "overlay";
+const variation = slice.primary.style || "overlay";
 const { eyebrow, heading, accent_phrase, body, image } = slice.primary;
 
 // Splits "Your manic pixie dream girl." into ["Your ", "manic pixie dream", " girl."]
@@ -49,7 +47,7 @@ const headingParts = splitHeading(heading, accent_phrase);
 const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1600 }) : null;
 ---
 
-{slice.variation === "split" && (
+{variation === "split" && (
   <div class="hero-split reveal">
     <div class="hero-split-text">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
@@ -62,7 +60,7 @@ const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1600 }) : null
   </div>
 )}
 
-{slice.variation === "overlay" && (
+{variation === "overlay" && (
   <div class="hero-full reveal" style={imgUrl ? `background-image:url(${imgUrl})` : ""}>
     <div class="hero-full-inner">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
@@ -74,7 +72,7 @@ const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1600 }) : null
   </div>
 )}
 
-{slice.variation === "plain" && (
+{variation === "plain" && (
   <>
     <div class="hero-full-plain-photo reveal" style={imgUrl ? `background-image:url(${imgUrl})` : ""}></div>
     <div class="hero-full-plain-caption">
