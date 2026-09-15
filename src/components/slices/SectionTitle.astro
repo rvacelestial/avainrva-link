@@ -1,0 +1,53 @@
+---
+// Section title — a small reusable "eyebrow + big heading" band, meant to
+// sit directly above another slice (a gallery, a pricing table, a features
+// grid) to label it. One variation; `alignment` just flips text-align
+// left/center.
+interface SectionTitlePrimary {
+  eyebrow?: string | null;
+  heading?: string | null;
+  body?: string | null;
+  alignment?: "left" | "center" | null;
+}
+import type { Slice } from "../../lib/prismicio.ts";
+interface Props {
+  slice: Slice<"section_title", "default", SectionTitlePrimary>;
+}
+const { slice } = Astro.props;
+const { eyebrow, heading, body, alignment } = slice.primary;
+const align = alignment === "left" ? "left" : "center";
+---
+
+<div class:list={["section-title", `section-title--${align}`]}>
+  {eyebrow && <p class="section-title-eyebrow">{eyebrow}</p>}
+  {heading && <h2 class="section-title-heading">{heading}</h2>}
+  {body && <p class="section-title-body">{body}</p>}
+</div>
+
+<style>
+  .section-title {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 0.5rem;
+  }
+  .section-title--center { text-align: center; }
+  .section-title--left { text-align: left; margin: 0 0 0.5rem; max-width: none; }
+  .section-title-eyebrow {
+    font-family: var(--font-menu);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent-gold);
+    margin: 0 0 0.5rem;
+  }
+  .section-title-heading {
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+  }
+  .section-title-body {
+    color: var(--color-text-muted);
+    margin: 0 auto;
+    max-width: 42ch;
+  }
+  .section-title--left .section-title-body { margin: 0; }
+</style>

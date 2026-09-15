@@ -25,6 +25,9 @@ interface Props {
   slice: Slice<"call_to_action", "band" | "split" | "image_background", CallToActionPrimary>;
 }
 const { slice } = Astro.props;
+// See Hero.astro's comment — a slice modeled without an explicit variation
+// comes back with none at all, so default it rather than rendering nothing.
+if (!slice.variation) (slice as any).variation = "band";
 const { heading, body, button_label, button_link, image, background_video } = slice.primary;
 const href = isFilled.link(button_link) ? asLink(button_link) : null;
 const imgUrl = isFilled.image(image) ? asImageSrc(image, { width: 1600 }) : null;
